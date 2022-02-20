@@ -37,9 +37,9 @@ RUN apt-get update \
 
 # For Building Protobufs
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
- && curl -OLsS https://github.com/google/protobuf/releases/download/v3.5.1/protoc-3.5.1-linux-x86_64.zip \
- && unzip protoc-3.5.1-linux-x86_64.zip -d protoc3 \
- && rm protoc-3.5.1-linux-x86_64.zip
+ && curl -OLsS https://github.com/google/protobuf/releases/download/v3.5.1/protoc-3.5.1-linux-aarch_64.zip \
+ && unzip protoc-3.5.1-linux-aarch_64.zip -d protoc3 \
+ && rm protoc-3.5.1-linux-aarch_64.zip
 
 ENV PATH=$PATH:/protoc3/bin
 RUN /root/.cargo/bin/cargo install cargo-deb
@@ -48,9 +48,9 @@ COPY . /project/sawtooth-pbft
 
 WORKDIR /project/sawtooth-pbft
 
-RUN export VERSION=$(./bin/get_version) \
+RUN export VERSION=1.0.4-dev1 \
  && sed -i -e "0,/version.*$/ s/version.*$/version\ =\ \"${VERSION}\"/" Cargo.toml \
- && /root/.cargo/bin/cargo deb --deb-version $VERSION
+ && /root/.cargo/bin/cargo deb --deb-version $VERSION --verbose
 
 # -------------=== pbft docker build ===-------------
 FROM ubuntu:bionic
